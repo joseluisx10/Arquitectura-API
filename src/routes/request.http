@@ -1,0 +1,80 @@
+###
+POST http://localhost:3000/Api/Productos HTTP/1.1
+Content-Type: application/json
+
+{
+    "codigo": 2,
+    "marca": "Adidas",
+    "categoria": "Campera",
+    "descripcion": "Campera deportiva de river",
+    "precio": 20000,
+    "stock": 7,
+    "img": "knklnkmkl"        
+}
+
+###
+GET http://localhost:3000/Api/Productos HTTP/1.1
+
+###
+GET http://localhost:3000/Api/Productos?marca=Adidas HTTP/1.1
+
+###
+PUT http://localhost:3000/Api/Productos/5 HTTP/1.1
+Content-Type: application/json
+
+
+{
+    "codigo": 4,
+    "marca": "puma",
+    "nombre": "short de licra"
+}
+
+###
+DELETE http://localhost:3000/Api/Productos HTTP/1.1
+
+
+
+###
+POST http://localhost:3000/Api/Clientes HTTP/1.1
+Content-Type: application/json
+
+{
+    "_id": 3,
+    "nombre": "Ana",
+    "apellido":"Perez",
+    "email": "anaperez@gmail.com"   
+}
+
+###
+GET http://localhost:3000/Api/Clientes HTTP/1.1
+
+
+###
+PUT http://localhost:3000/Api/Clientes/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "nombre": "Anabela"
+}
+
+###
+DELETE http://localhost:3000/Api/Clientes/2 HTTP/1.1
+
+
+###
+POST http://localhost:3000/Api/Categorias HTTP/1.1
+Content-Type: application/json
+
+{
+    "_id": 1,
+    "nombre": "Remera",
+    "estado":"Nuevo",
+    "productos":" http://localhost:3000/Api/Productos?categoria=Remera "    
+}
+
+###
+GET http://localhost:3000/Api/Categorias HTTP/1.1
+
+###
+
+DELETE http://localhost:3000/Api/Categorias/1 HTTP/1.1
