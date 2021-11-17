@@ -35,6 +35,7 @@ router.post('/', (req, res)=>{
         }else{
 
            return [];
+           //return throw new Error("")
         }
         
     }

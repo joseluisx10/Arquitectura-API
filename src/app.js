@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 const productosRouter= require('./routes/productos');
 const clientesRouter= require('./routes/clientes');
 const categoriasRouter= require('./routes/categorias');
 const carritoRouter= require('./routes/carrito');
+const Carrito = require('./models/Carrito');
 
 app.use(express.json());
 app.use('/Api/Productos', productosRouter);
@@ -11,7 +13,19 @@ app.use('/Api/Clientes', clientesRouter);
 app.use('/Api/Categorias', categoriasRouter);
 app.use('Api/Carritos', carritoRouter);
 
-app.get('/', (req, res)=>{res.send('Bienvenidos al Servicio Api');})
+
+
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+app.set('views', path.join(__dirname, 'views'));
+app.set("view engine", "pug");
+
+app.get('/', (req, res)=>{res.render('home');})
+app.get('/productos', (req, res) =>{ res.render('producto')});
+app.get('/clientes', (req, res)=>{res.render('cliente')});
+//app.get('/categorias', (req, res)=>{res.render('categoria')});
+//app.get('carrito', (req, res) => {res.render('Carrito')});
+
 
 app.get('/Api', (req ,res)=>{
     res.setHeader('Version', '1.0');

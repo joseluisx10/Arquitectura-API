@@ -1,0 +1,27 @@
+extends ./partials/head.pug
+block content
+  h1 CRUD DE CLIENTES 
+  table(class = "table table-dark table-scriped")
+    thead 
+      tr 
+        th(scope = "col") #
+        th(scope = "col") first
+        th(scope = "col") last 
+        th(scope = "col") handle
+    tbody 
+      tr 
+        th(scope="row") 1
+        td mark 
+        td otto 
+        td kjik
+      tr
+        th(scope="row") 2  
+        td jacob 
+        td thornos
+        td jnkjl
+      tr    
+        th(scope="row") 3
+        td(colspan="2") Larry the bird 
+        td thiter  
+
+block scripts        

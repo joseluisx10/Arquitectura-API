@@ -1,4 +1,4 @@
-const {Schema, model} = require('monggose');
+const {Schema, model} = require('mongoose');
 
 let carritoSchema = new Schema({
 
