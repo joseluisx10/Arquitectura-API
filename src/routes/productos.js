@@ -9,7 +9,7 @@ router.get('/', async(req, res)=>{
 //Busqueda de expresiones regulares
     if (!/\?.+/.test(req.url)) {
         dataProd = await dbProduct.find();
-        res.setHeader("Accep", "Application/Json");
+        res.setHeader("Accept", "Application/Json");
         res.json(dataProd);
     }
     else {

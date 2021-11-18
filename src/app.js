@@ -8,10 +8,10 @@ const carritoRouter= require('./routes/carrito');
 const Carrito = require('./models/Carrito');
 
 app.use(express.json());
-app.use('/Api/Productos', productosRouter);
-app.use('/Api/Clientes', clientesRouter);
-app.use('/Api/Categorias', categoriasRouter);
-app.use('Api/Carritos', carritoRouter);
+app.use('/api/Productos', productosRouter);
+app.use('/api/Clientes', clientesRouter);
+app.use('/api/Categorias', categoriasRouter);
+app.use('/api/Carritos', carritoRouter);
 
 
 

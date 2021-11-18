@@ -19,28 +19,28 @@ block body
                 tbody
     
             .box-form   
-                form
+                form(action= "/productos")
                     .mb-1  
                         lavel(for="codigo" class="form-label") Codigo
-                        input(type="" id="codigo" class="form-control")
+                        input(type="" id="codigo" class="form-control" name= "codigo")
                     .mb-1  
                         lavel(for="marca" class="form-label") Marca 
-                        input(type="text" id="marca" class="form-control" aria-describedby="")
+                        input(type="text" id="marca" class="form-control" name= "marca")
                     .mb-1  
                         lavel(for="categoria" class="form-label") Categoria
-                        input(type="text" id="categoria" class="form-control")
+                        input(type="text" id="categoria" class="form-control" name= "categoria")
                     .mb-1     
                         lavel(for="descripcion" class="form-label") Descripcion 
-                        input(type="text" id="descripcion" class="form-control")
+                        input(type="text" id="descripcion" class="form-control" name= "descripcion")
                     .mb-1  
                         lavel(for="precio" class="form-label") Precio
-                        input(type="number" id="precio" class="form-control")
+                        input(type="number" id="precio" class="form-control" name= "precio")
                     .mb-1 
                         lavel(for="cantidad" class="form-label") Cantidad
-                        input(type="number" id="cantidad" class="form-control")
+                        input(type="number" id="cantidad" class="form-control" name= "cantidad")
                     .mb-3 
                         lavel(for="img" class="form-label") Link de Img
-                        input(type="text" id="img" class="form-control")
+                        input(type="text" id="img" class="form-control" name= "link")
                     button(type="submit" class="btn btn-outline-primary") Crear   
             
       

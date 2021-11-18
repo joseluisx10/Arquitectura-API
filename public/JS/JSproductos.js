@@ -1,4 +1,4 @@
-window.addEventListener('load', ()=>{
+window.addEventListener('load', (e)=>{
 
     let getProductos=async(url)=>{
         let registroProd = await fetch(url,
@@ -6,8 +6,8 @@ window.addEventListener('load', ()=>{
             method: 'GET', 
             cache: 'default',
             headers:{
-                'accep': 'application/json',
-                'version': '1.0'}
+                'Accept': 'Application/Json',
+                'Version': '1.0'}
         });
         return registroProd.json();
     }
@@ -50,14 +50,14 @@ window.addEventListener('load', ()=>{
             tr.appendChild(tdImg);
             let button = document.createElement('button');
             button.type= "button";
-            button.className= "btn btn-outline-success";
+            button.className= "bton btn btn-outline-success";
             button.innerText = "Editar"
             let tdButton= document.createElement('td')
             tdButton.appendChild(button);
            
             let button1 = document.createElement('button');
             button1.type= "button";
-            button1.className= "btn btn-outline-danger";
+            button1.className= "bton btn btn-outline-danger";
             button1.innerText = "Eliminar"
             tdButton.appendChild(button1);
             tr.appendChild(tdButton)
@@ -65,4 +65,38 @@ window.addEventListener('load', ()=>{
         };
     })
     
+    
+    
+   // let buttonEditar = document.getElementsByClassName('button');
+    let form= document.querySelector('form');
+    form.addEventListener('submit', (e1)=>{
+        //e1.preventDefault();
+        let data= new FormData(form);
+        console.log(data.get('cantidad'))
+        let body = {
+            codigo: Number(data.get('codigo')),
+            marca: data.get('marca'),
+            categoria: data.get('categoria'),
+            descripcion: data.get('descripcion'),
+            precio: Number(data.get('precio')),
+            stock: Number(data.get('cantidad')),
+            img: data.get('link')
+        }
+
+        let crearProducto=async(url, body)=>{
+            await fetch(url,{
+                method: 'POST', 
+                headers:{
+                    'Content-Type': "Application/Json"
+                },
+                body:JSON.stringify(body)
+            })
+        
+        }
+
+        crearProducto('/api/Productos', body);
+    })
+    
+    
+
 })
