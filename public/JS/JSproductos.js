@@ -48,20 +48,71 @@ window.addEventListener('load', (e)=>{
             let tdImg= document.createElement('td');
             tdImg.appendChild(document.createTextNode(element.img));
             tr.appendChild(tdImg);
-            let button = document.createElement('button');
-            button.type= "button";
-            button.className= "bton btn btn-outline-success";
-            button.innerText = "Editar"
-            let tdButton= document.createElement('td')
-            tdButton.appendChild(button);
-           
+            let html = 
+            ` <button type="button" class="bton btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal-${cont}" data-bs-whatever="@mdo">Editar</button>
+            <div class="modal fade" id="exampleModal-${cont}" tabindex="-1" aria-labelledby="exampleModalLabel-${cont}" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel-${cont}">Complete los campos que desea Editar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <div class="mb-1">
+                        <label for="codigo" class="col-form-label">Codigo:</label>
+                        <input type="number" class="form-control" id="codigo">
+                      </div>
+                      <div class="mb-1">
+                        <label for="marca" class="col-form-label">Marca:</label>
+                        <input type="text" class="form-control" id="marca">
+                      </div>
+                      <div class="mb-1">
+                        <label for="categoria" class="col-form-label">Categoria:</label>
+                        <input type="text" class="form-control" id="categoria">
+                      </div>
+                      <div class="mb-1">
+                        <label for="descripcion" class="col-form-label">Descripcion:</label>
+                        <input type="text" class="form-control" id="descripcion">
+                      </div>
+                      <div class="mb-1">
+                        <label for="precio" class="col-form-label">Precio $:</label>
+                        <input type="number" class="form-control" id="precio">
+                      </div>
+                      <div class="mb-1">
+                        <label for="stock" class="col-form-label">Stock:</label>
+                        <input type="number" class="form-control" id="stock">
+                      </div>
+                      <div class="mb-1">
+                        <label for="img" class="col-form-label">Link Img:</label>
+                        <input type="text" class="form-control" id="img">
+                      </div>
+
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-success">Guardar</button>
+                  </div>
+                </div>
+              </div>
+            </div>          
+            
+            `;
+            let tda= document.createElement('td');
             let button1 = document.createElement('button');
+            tda.innerHTML = html;
             button1.type= "button";
             button1.className= "bton btn btn-outline-danger";
-            button1.innerText = "Eliminar"
-            tdButton.appendChild(button1);
-            tr.appendChild(tdButton)
+            button1.innerText = "Eliminar";
+            button1.onclick=()=>{ deleteproducto(element.codigo)};
+            let a1 = document.createElement('a');
+            a1.href= '/productos';
+            a1.appendChild(button1);
+            tda.appendChild(a1)
+            tr.appendChild(tda);
             HTMLResponse.appendChild(tr);
+           
         };
     })
     
@@ -83,8 +134,8 @@ window.addEventListener('load', (e)=>{
             img: data.get('link')
         }
 
-        let crearProducto=async(url, body)=>{
-            await fetch(url,{
+        let crearProducto=(url, body)=>{
+                fetch(url,{
                 method: 'POST', 
                 headers:{
                     'Content-Type': "Application/Json"
@@ -94,9 +145,34 @@ window.addEventListener('load', (e)=>{
         
         }
 
-        crearProducto('/api/Productos', body);
+        crearProducto('/api/Productos', body)
     })
     
+
     
 
+    const deleteproducto= (codigo) =>{
+        console.log(codigo)
+        let url = `/api/productos/${codigo}`;
+        fetch(url, {
+            method: 'DELETE',
+        });
+
+    }   
+
 })
+/**var exampleModal = document.getElementById('exampleModal')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        //var button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        //var recipient = button.getAttribute('data-bs-whatever')
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        //var modalTitle = exampleModal.querySelector('.modal-title')
+        //var modalBodyInput = exampleModal.querySelector('.modal-body input')
+    
+       
+    })*/

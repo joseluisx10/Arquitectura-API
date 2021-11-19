@@ -17,12 +17,13 @@ block body
                       th(scope = "col") Src(Img) 
                       th(scope = "col") Funcion 
                 tbody
+                
     
             .box-form   
-                form(action= "/productos")
+                form(method= 'POST')
                     .mb-1  
                         lavel(for="codigo" class="form-label") Codigo
-                        input(type="" id="codigo" class="form-control" name= "codigo")
+                        input(type="number" id="codigo" class="form-control" name= "codigo")
                     .mb-1  
                         lavel(for="marca" class="form-label") Marca 
                         input(type="text" id="marca" class="form-control" name= "marca")
@@ -41,7 +42,13 @@ block body
                     .mb-3 
                         lavel(for="img" class="form-label") Link de Img
                         input(type="text" id="img" class="form-control" name= "link")
-                    button(type="submit" class="btn btn-outline-primary") Crear   
+                    button(type="submit" class="btn btn-outline-primary") Crear  
+
+
+
+            
+            
+            
             
       
 append scripts
