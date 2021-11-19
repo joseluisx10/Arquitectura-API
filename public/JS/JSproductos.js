@@ -9,7 +9,12 @@ window.addEventListener('load', (e)=>{
                 'Accept': 'Application/Json',
                 'Version': '1.0'}
         });
-        return registroProd.json();
+        if(registroProd.status == 200){
+            return registroProd.json();
+        }else{
+            throw "Respuesta incorrecta del servidor";
+        }
+        
     }
     
     getProductos('/api/Productos').then(response =>{
@@ -48,8 +53,9 @@ window.addEventListener('load', (e)=>{
             let tdImg= document.createElement('td');
             tdImg.appendChild(document.createTextNode(element.img));
             tr.appendChild(tdImg);
+            
             let html = 
-            ` <button type="button" class="bton btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal-${cont}" data-bs-whatever="@mdo">Editar</button>
+            ` <button type="button" class="bton btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal-${cont}" data-bs-whatever=${element.codigo}>Editar</button>
             <div class="modal fade" id="exampleModal-${cont}" tabindex="-1" aria-labelledby="exampleModalLabel-${cont}" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -61,53 +67,51 @@ window.addEventListener('load', (e)=>{
                     <form>
                       <div class="mb-1">
                         <label for="codigo" class="col-form-label">Codigo:</label>
-                        <input type="number" class="form-control" id="codigo">
+                        <input type="number" class="codigo form-control" id="codigo">
                       </div>
                       <div class="mb-1">
                         <label for="marca" class="col-form-label">Marca:</label>
-                        <input type="text" class="form-control" id="marca">
+                        <input type="text" class="marca form-control" id="marca">
                       </div>
                       <div class="mb-1">
                         <label for="categoria" class="col-form-label">Categoria:</label>
-                        <input type="text" class="form-control" id="categoria">
+                        <input type="text" class="categoria form-control" id="categoria">
                       </div>
                       <div class="mb-1">
                         <label for="descripcion" class="col-form-label">Descripcion:</label>
-                        <input type="text" class="form-control" id="descripcion">
+                        <input type="text" class="descripcion form-control" id="descripcion">
                       </div>
                       <div class="mb-1">
                         <label for="precio" class="col-form-label">Precio $:</label>
-                        <input type="number" class="form-control" id="precio">
+                        <input type="number" class="precio form-control" id="precio">
                       </div>
                       <div class="mb-1">
                         <label for="stock" class="col-form-label">Stock:</label>
-                        <input type="number" class="form-control" id="stock">
+                        <input type="number" class="stock form-control" id="stock">
                       </div>
                       <div class="mb-1">
                         <label for="img" class="col-form-label">Link Img:</label>
-                        <input type="text" class="form-control" id="img">
+                        <input type="text" class="img form-control" id="img">
                       </div>
 
                     </form>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-success">Guardar</button>
+                    <button  onclick="" type="button" class="btn btn-outline-success">Guardar</button>
                   </div>
                 </div>
               </div>
-            </div>          
-            
-            `;
+            </div> `;
             let tda= document.createElement('td');
             let button1 = document.createElement('button');
             tda.innerHTML = html;
+
             button1.type= "button";
             button1.className= "bton btn btn-outline-danger";
             button1.innerText = "Eliminar";
-            button1.onclick=()=>{ deleteproducto(element.codigo)};
+            button1.onclick=()=>{ deletePRO(element.codigo, tr)};
             let a1 = document.createElement('a');
-            a1.href= '/productos';
             a1.appendChild(button1);
             tda.appendChild(a1)
             tr.appendChild(tda);
@@ -115,6 +119,9 @@ window.addEventListener('load', (e)=>{
            
         };
     })
+    .catch(err =>{
+        console.log(err);
+    });
     
     
     
@@ -148,31 +155,50 @@ window.addEventListener('load', (e)=>{
         crearProducto('/api/Productos', body)
     })
     
+    const deletePRO = (codigo, tr)=>{
+        let xhttp = new XMLHttpRequest();
+        xhttp.open('DELETE', `/api/productos/${codigo}` )
+        xhttp.setRequestHeader('Accept', '*/*');
+        xhttp.onreadystatechange = ()=>{
+            if(xhttp.readyState == 4){
+                tr.parentNode.removeChild(tr);
+            }
+        }
+        xhttp.send();
+    }
 
     
 
-    const deleteproducto= (codigo) =>{
-        console.log(codigo)
-        let url = `/api/productos/${codigo}`;
-        fetch(url, {
-            method: 'DELETE',
-        });
+    function editProducto(codigo, cont) {
+        console.log('el cod: '+codigo)
+        let modal = document.getElementById(`exampleModal-${cont}`);
+        modal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            var button = event.relatedTarget;
+            // Extract info from data-bs-* attributes
+            var recipient = button.getAttribute('data-bs-whatever');
+            // If necessary, you could initiate an AJAX request here
+            // and then do the updating in a callback.
+            //
+            // Update the modal's content.
+            //var modalTitle = exampleModal.querySelector('.modal-title')
+            console.log(recipient);
+            var modalBodyInput = exampleModal.querySelector('.modal-body .codigo');
 
-    }   
+            //modalTitle.textContent = 'New message to ' + recipient
+            modalBodyInput.value = recipient;
+
+            let xhttp = new XMLHttpRequest();
+            xhttp.open('PUT', `/api/productos/${codigo}`);
+            xhttp.setRequestHeader('Content-Type', 'Application/Json');
+            xhttp.onreadystatechange = () => {
+                if (xhttp.readyState == 4) {
+                }
+            };
+            xhttp.send();
+
+
+        });
+    }
 
 })
-/**var exampleModal = document.getElementById('exampleModal')
-    exampleModal.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
-        //var button = event.relatedTarget
-        // Extract info from data-bs-* attributes
-        //var recipient = button.getAttribute('data-bs-whatever')
-        // If necessary, you could initiate an AJAX request here
-        // and then do the updating in a callback.
-        //
-        // Update the modal's content.
-        //var modalTitle = exampleModal.querySelector('.modal-title')
-        //var modalBodyInput = exampleModal.querySelector('.modal-body input')
-    
-       
-    })*/
