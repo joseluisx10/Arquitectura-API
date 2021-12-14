@@ -22,7 +22,6 @@ app.set("view engine", "pug");
 
 app.get('/', (req, res)=>{res.render('home');})
 app.get('/productos', (req, res) =>{ res.render('producto')});
-app.post('/productos', (req, res) =>{ res.redirect('productos');});
 app.get('/clientes', (req, res)=>{res.render('cliente')});
 //app.get('/categorias', (req, res)=>{res.render('categoria')});
 //app.get('carrito', (req, res) => {res.render('Carrito')});

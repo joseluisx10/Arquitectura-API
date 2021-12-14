@@ -1,4 +1,20 @@
 window.addEventListener('load', (e)=>{
+  
+    function StaticCont(){
+      this.cont = 0;
+      this.setSumar = function(){
+        this.cont ++;
+      }
+      this.setRestar = function(){
+        this.cont --;
+      }
+      this.getCont = function(){
+        return this.cont;
+      }
+
+    }
+    
+    let contador = new StaticCont();
 
     let getProductos=async(url)=>{
         let registroProd = await fetch(url,
@@ -27,6 +43,7 @@ window.addEventListener('load', (e)=>{
         for(const element of response) {
             console.log(element.codigo)
             cont += 1;
+            contador.setSumar();
             let tr= document.createElement('tr');
             let th = document.createElement('th');
             th.scope = "row";
@@ -123,12 +140,10 @@ window.addEventListener('load', (e)=>{
         console.log(err);
     });
     
-    
-    
-   // let buttonEditar = document.getElementsByClassName('button');
     let form= document.querySelector('form');
     form.addEventListener('submit', (e1)=>{
-        //e1.preventDefault();
+       console.log("hola")
+        e1.preventDefault();       
         let data= new FormData(form);
         console.log(data.get('cantidad'))
         let body = {
@@ -141,26 +156,121 @@ window.addEventListener('load', (e)=>{
             img: data.get('link')
         }
 
-        let crearProducto=(url, body)=>{
-                fetch(url,{
-                method: 'POST', 
-                headers:{
-                    'Content-Type': "Application/Json"
-                },
-                body:JSON.stringify(body)
-            })
+        let crearProducto=async(url, body)=>{
+          let setProduct = await fetch(url,{
+          method: 'POST', 
+          headers:{
+              'Content-Type': "Application/Json"
+          },
+          body:JSON.stringify(body)
         
+        
+        })
+        if(setProduct.status == 201 ){
+          
+          contador.setSumar();
+          let tbody = document.querySelector('tbody');
+          let tr= document.createElement('tr');
+          let th = document.createElement('th');
+          th.scope = "row";
+          th.appendChild(document.createTextNode(contador.getCont()));
+          tr.appendChild(th);
+          let tdCod = document.createElement('td');
+          tdCod.appendChild(document.createTextNode(body.codigo))
+          tr.appendChild(tdCod);
+          let tdMarca = document.createElement('td');
+          tdMarca.appendChild(document.createTextNode(body.marca))
+          tr.appendChild(tdMarca);
+          let tdCategoria = document.createElement('td');
+          tdCategoria.appendChild(document.createTextNode(body.categoria));
+          tr.appendChild(tdCategoria);
+          let tdDescrip= document.createElement('td');
+          tdDescrip.appendChild(document.createTextNode(body.descripcion))
+          tr.appendChild(tdDescrip);
+          let tdPrecio = document.createElement('td');
+          tdPrecio.appendChild(document.createTextNode(body.precio));
+          tr.appendChild(tdPrecio);
+          let tdStock = document.createElement('td');
+          tdStock.appendChild(document.createTextNode(body.stock));
+          tr.appendChild(tdStock);
+          let tdImg= document.createElement('td');
+          tdImg.appendChild(document.createTextNode(body.img));
+          tr.appendChild(tdImg);
+          
+          let html = 
+          `<button type="button" class="bton btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal-${contador.getCont()}" data-bs-whatever=${body.codigo}>Editar</button>
+          <div class="modal fade" id="exampleModal-${contador.getCont()}" tabindex="-1" aria-labelledby="exampleModalLabel-${contador.getCont()}" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel-${contador.getCont()}">Complete los campos que desea Editar</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="mb-1">
+                      <label for="marca" class="col-form-label">Marca:</label>
+                      <input type="text" class="marca form-control" id="marca" placeholder="${body.marca}">
+                    </div>
+                    <div class="mb-1">
+                      <label for="categoria" class="col-form-label">Categoria:</label>
+                      <input type="text" class="categoria form-control" id="categoria" placeholder="${body.categoria}">
+                    </div>
+                    <div class="mb-1">
+                      <label for="descripcion" class="col-form-label">Descripcion:</label>
+                      <input type="text" class="descripcion form-control" id="descripcion" placeholder="${body.descripcion}">
+                    </div>
+                    <div class="mb-1">
+                      <label for="precio" class="col-form-label">Precio $:</label>
+                      <input type="number" class="precio form-control" id="precio">
+                    </div>
+                    <div class="mb-1">
+                      <label for="stock" class="col-form-label">Stock:</label>
+                      <input type="number" class="stock form-control" id="stock">
+                    </div>
+                    <div class="mb-1">
+                      <label for="img" class="col-form-label">Link Img:</label>
+                      <input type="text" class="img form-control" id="img">
+                    </div
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                  <button  onclick="editProducto()" type="button" class="btn btn-outline-success">Guardar</button>
+                </div>
+              </div>
+            </div>
+          </div> `;
+          let tda= document.createElement('td');
+          let button1 = document.createElement('button');
+          tda.innerHTML = html
+          button1.type= "button";
+          button1.className= "bton btn btn-outline-danger";
+          button1.innerText = "Eliminar";
+          button1.onclick=()=>{ deleteProducto(body.codigo, tr)};
+          let a1 = document.createElement('a');
+          a1.appendChild(button1);
+          tda.appendChild(a1)
+          tr.appendChild(tda)
+          tbody.appendChild(tr);
+        }else{
+          alert("El producto con codigo "+ body.codigo + " ya existe")
         }
+        }
+        crearProducto('/api/Productos', body);
 
-        crearProducto('/api/Productos', body)
+
+        
+
     })
     
-    const deletePRO = (codigo, tr)=>{
+    const deleteProducto = (codigo, tr)=>{
         let xhttp = new XMLHttpRequest();
         xhttp.open('DELETE', `/api/productos/${codigo}` )
         xhttp.setRequestHeader('Accept', '*/*');
         xhttp.onreadystatechange = ()=>{
             if(xhttp.readyState == 4){
+                contador.setRestar();
                 tr.parentNode.removeChild(tr);
             }
         }
@@ -170,7 +280,7 @@ window.addEventListener('load', (e)=>{
     
 
     function editProducto(codigo, cont) {
-        console.log('el cod: '+codigo)
+        console.log('el cod: ' + codigo)
         let modal = document.getElementById(`exampleModal-${cont}`);
         modal.addEventListener('show.bs.modal', function (event) {
             // Button that triggered the modal
